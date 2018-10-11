@@ -59,8 +59,8 @@ func TestLoadNotSavedPresetGivesError(t *testing.T) {
 	_, err := ds.LoadPreset("Another preset name")
 
 	// Assert
-	if err != datastore.ErrPresetNotFound {
-		t.Errorf("Expected error was %v but got %v", datastore.ErrPresetNotFound, err)
+	if err != datastore.ErrPresetNotFoundInDataStore {
+		t.Errorf("Expected error was %v but got %v", datastore.ErrPresetNotFoundInDataStore, err)
 	}
 }
 

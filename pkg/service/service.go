@@ -8,7 +8,7 @@ import (
 // PresetsService represents the available operations in the Presets service
 type PresetsService interface {
 	ListPresets() []string
-	//UploadPreset(preset preset.Info) error
+	UploadPreset(preset preset.Info) error
 	ShowPreset(presetName string) (preset.Info, error)
 }
 
@@ -30,7 +30,7 @@ func (p *presets) ListPresets() []string {
 func (p *presets) ShowPreset(presetName string) (preset.Info, error) {
 	pi, err := p.ds.LoadPreset(presetName)
 	if err != nil {
-		if err == datastore.ErrPresetNotFound {
+		if err == datastore.ErrPresetNotFoundInDataStore {
 			return pi, newErrPresetNotFound(err.Error())
 		}
 
@@ -38,4 +38,14 @@ func (p *presets) ShowPreset(presetName string) (preset.Info, error) {
 	}
 
 	return pi, err
+}
+
+func (p *presets) UploadPreset(preset preset.Info) error {
+	err := p.ds.SavePreset(preset)
+	if err != nil {
+		return newErrUploadingPreset(err.Error())
+	}
+
+	// Check this: https://zupzup.org/go-http-file-upload-download/
+	return nil
 }

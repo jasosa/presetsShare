@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/jasosa/PresetsManagement/pkg/datastore/memory"
+	"github.com/jasosa/PresetsManagement/pkg/datastore/mock"
 )
 
 func TestListPresets(t *testing.T) {
@@ -60,4 +61,39 @@ func TestLoadNonExistentPreset(t *testing.T) {
 			t.Errorf("Expected error was '%q' but got '%v'", "ErrPresetNotFound", errors.Cause(err))
 		}
 	}
+}
+
+func TestUploadPresetSuccesfully(t *testing.T) {
+	ds := memory.NewDataStore()
+	ps := NewPresetsService(ds)
+	presetInfo := preset.Info{Name: "Preset C", Amp: preset.AmpModels.Fender65UsTw}
+	err := ps.UploadPreset(presetInfo)
+	if err != nil {
+		t.Fatalf("Non error was expected but got %q", err.Error())
+	}
+
+	numberOfPresets := len(ps.ListPresets())
+	if numberOfPresets != 1 {
+		t.Errorf("Expected a list of '%d' presets but got '%d'", 1, numberOfPresets)
+	}
+}
+
+func TestUploadPresetError(t *testing.T) {
+	mds := mock.NewFailingDataStore()
+	ps := NewPresetsService(mds)
+	presetInfo := preset.Info{Name: "Preset C", Amp: preset.AmpModels.Fender65UsTw}
+	err := ps.UploadPreset(presetInfo)
+	if err == nil {
+		t.Fatalf("Error was expected but got %v", err)
+	}
+
+	if err != nil {
+		switch err.(type) {
+		case *ErrUploadingPreset:
+			// everything ok
+		default:
+			t.Errorf("Expected error was '%q' but got '%v'", "ErrUploadingPreset", errors.Cause(err))
+		}
+	}
+
 }

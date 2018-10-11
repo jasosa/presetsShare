@@ -31,7 +31,7 @@ func (m *memoryDataStore) LoadPreset(presetName string) (preset.Info, error) {
 		return pi, nil
 	}
 
-	return preset.Info{}, datastore.ErrPresetNotFound
+	return preset.Info{}, datastore.ErrPresetNotFoundInDataStore
 }
 
 func (m *memoryDataStore) GetPresetNames() []string {

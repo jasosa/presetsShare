@@ -2,5 +2,5 @@ package datastore
 
 import "errors"
 
-//ErrPresetNotFound the preset was not found in the datastore
-var ErrPresetNotFound = errors.New("preset not found in datastore")
+//ErrPresetNotFoundInDataStore the preset was not found in the datastore
+var ErrPresetNotFoundInDataStore = errors.New("preset not found in datastore")

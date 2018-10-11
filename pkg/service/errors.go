@@ -35,3 +35,19 @@ func newErrUnknown(message string) *ErrUnknown {
 func (e *ErrUnknown) Error() string {
 	return fmt.Sprintf("unknown error getting the preset. %s", e.message)
 }
+
+// ErrUploadingPreset represents an error while trying to upload a preset in the
+type ErrUploadingPreset struct {
+	message string
+}
+
+//newErrUploadingPreset returns a new ErrUploadingPreset error
+func newErrUploadingPreset(message string) *ErrUploadingPreset {
+	return &ErrUploadingPreset{
+		message: message,
+	}
+}
+
+func (e *ErrUploadingPreset) Error() string {
+	return fmt.Sprintf("error uploading preset. %s", e.message)
+}
